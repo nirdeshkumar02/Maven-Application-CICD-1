@@ -29,5 +29,14 @@ pipeline{
                 }
             }
         }
+        stage('SAST Analysis with SonarQube'){
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonar-creds') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
+            }
+        }
     }
 }
