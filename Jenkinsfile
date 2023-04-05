@@ -51,6 +51,8 @@ pipeline{
                 script{
                     //  Reading pom.xml file for versioning
                     def readPomVersion = readMavenPom file: 'pom.xml'
+                    //  Checking for condition, if artifect is release save it to release repo otherwise put it in snap repo in the nexus
+                    def nexusRepo = readMavenPom.version.endsWith("SNAPSHOT") ? "maven-appliction-snapshot" : "maven-appliction-release"
                     //  Upload to nexus
                     nexusArtifactUploader artifacts: 
                     [
@@ -66,7 +68,7 @@ pipeline{
                     nexusUrl: '3.108.194.173:8081', 
                     nexusVersion: 'nexus3', 
                     protocol: 'http', 
-                    repository: 'maven-appliction-release', 
+                    repository: "${nexusRepo}",
                     version: "${readPomVersion.version}"
                 }
             }
