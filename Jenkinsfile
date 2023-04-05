@@ -41,7 +41,8 @@ pipeline{
         stage('SonarQube Quality Gate Status'){
             steps{
                 script{
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-creds'
+                    // If Quality Gate Status is failed then pipeline should abort
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-creds'
                 }
             }
         }
