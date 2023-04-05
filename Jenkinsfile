@@ -76,9 +76,20 @@ pipeline{
         stage("Docker Build"){
             steps{
                 script{
-                    sh 'docker build -t $JOB_NAME:v1.$BUILD_ID .'
-                    sh 'docker tag $JOB_NAME:v1.$BUILD_ID nirdeshkumar02/$JOB_NAME:v1.$BUILD_ID'
-                    sh 'docker tag $JOB_NAME:v1.$BUILD_ID nirdeshkumar02/$JOB_NAME:latest'
+                    sh "docker build -t $JOB_NAME:v1.$BUILD_ID ."
+                    sh "docker tag $JOB_NAME:v1.$BUILD_ID nirdeshkumar02/$JOB_NAME:v1.$BUILD_ID"
+                    sh "docker tag $JOB_NAME:v1.$BUILD_ID nirdeshkumar02/$JOB_NAME:latest"
+                }
+            }
+        }
+        stage("Push Image to DockerHub"){
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_pass')]) {
+                        sh "docker login -u nirdeshkumar02 -p ${docker_pass}"
+                        sh "docker push nirdeshkumar02/$JOB_NAME:v1.$BUILD_ID"
+                        sh "docker push nirdeshkumar02/$JOB_NAME:latest"
+                    }
                 }
             }
         }
