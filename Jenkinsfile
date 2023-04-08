@@ -94,4 +94,9 @@ pipeline{
             }
         }
     }
+    post{
+        always {
+            mail bcc: '', body: "<br>Project: $JOB_NAME <br>Build Number: $BUILD_NUMBER <br> URL: $BUILD_URL", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "${currentBuild.result} CI: Project Name -> $JOB_NAME", to: "nirdesh.saini@shunyeka.com";
+        }
+    }
 }

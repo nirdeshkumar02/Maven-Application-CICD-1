@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myjavaapp-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myjavaapp
+  template:
+    metadata:
+      labels:
+        app: myjavaapp
+    spec:
+      containers:
+      - name: myjavaapp
+        image: maven-app-cicd-1:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9090
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myjavaapp-service
+spec:
+  selector:
+    app: myjavaapp
+  ports:
+  - name: http
+    port: 80
+    targetPort: 9090
+  type: LoadBalancer
